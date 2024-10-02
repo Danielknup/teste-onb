@@ -85,36 +85,36 @@
     </div>
 
     <script>
-        // Ao carregar a página, restaura os estados das checkboxes
-        window.onload = () => {
+        // Aguarda o carregamento do DOM para executar o código
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ao carregar a página, restaura os estados das checkboxes
             const items = document.querySelectorAll('.check-item');
             items.forEach((item, index) => {
                 item.checked = JSON.parse(localStorage.getItem(`checkItem${index}`)) || false;
             });
-        };
 
-        // Salva o estado da checkbox no localStorage ao mudar
-        document.querySelectorAll('.check-item').forEach((item, index) => {
-            item.addEventListener('change', () => {
-                localStorage.setItem(`checkItem${index}`, item.checked);
+            // Salva o estado da checkbox no localStorage ao mudar
+            items.forEach((item, index) => {
+                item.addEventListener('change', () => {
+                    localStorage.setItem(`checkItem${index}`, item.checked);
+                });
             });
-        });
 
-        document.getElementById('concluir').addEventListener('click', () => {
-            const items = document.querySelectorAll('.check-item');
-            const checkedItems = Array.from(items).filter(item => item.checked);
-            
-            if (checkedItems.length === items.length) {
-                alert('Parabéns! Você seguiu todos os passos corretamente, siga para o próximo MID.');
-            } else {
-                alert(`Você ainda não completou a checklist. Faltam ${items.length - checkedItems.length} itens.`);
-            }
-        });
+            document.getElementById('concluir').addEventListener('click', () => {
+                const checkedItems = Array.from(items).filter(item => item.checked);
+                
+                if (checkedItems.length === items.length) {
+                    alert('Parabéns! Você seguiu todos os passos corretamente, siga para o próximo MID.');
+                } else {
+                    alert(`Você ainda não completou a checklist. Faltam ${items.length - checkedItems.length} itens.`);
+                }
+            });
 
-        // Lógica para abrir e fechar a checklist flutuante
-        document.getElementById('openChecklist').addEventListener('click', () => {
-            const checklist = document.getElementById('floatingChecklist');
-            checklist.style.display = checklist.style.display === 'none' || checklist.style.display === '' ? 'block' : 'none';
+            // Lógica para abrir e fechar a checklist flutuante
+            document.getElementById('openChecklist').addEventListener('click', () => {
+                const checklist = document.getElementById('floatingChecklist');
+                checklist.style.display = checklist.style.display === 'none' || checklist.style.display === '' ? 'block' : 'none';
+            });
         });
     </script>
 
