@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        #checklist {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        button {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #floatingChecklist {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            display: none;
+            border: 1px solid #ccc;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+        }
+        #openChecklist {
+            position: fixed;
+            bottom: 20px;
+            right: 330px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="openChecklist">Abrir Checklist</button>
+    
+    <div id="floatingChecklist">
+        <div id="checklist">
+            <h1>Minha Checklist</h1>
+            <ul>
+                <li><input type="checkbox" class="check-item"> Item 1</li>
+                <li><input type="checkbox" class="check-item"> Item 2</li>
+                <li><input type="checkbox" class="check-item"> Item 3</li>
+                <li><input type="checkbox" class="check-item"> Item 4</li>
+                <li><input type="checkbox" class="check-item"> Item 5</li>
+            </ul>
+            <button id="concluir">Concluído</button>
+        </div>
+    </div>
+
+    <script>
+        // Ao carregar a página, restaura os estados das checkboxes
+        window.onload = () => {
+            const items = document.querySelectorAll('.check-item');
+            items.forEach((item, index) => {
+                item.checked = JSON.parse(localStorage.getItem(`checkItem${index}`)) || false;
+            });
+        };
+
+        // Salva o estado da checkbox no localStorage ao mudar
+        document.querySelectorAll('.check-item').forEach((item, index) => {
+            item.addEventListener('change', () => {
+                localStorage.setItem(`checkItem${index}`, item.checked);
+            });
+        });
+
+        document.getElementById('concluir').addEventListener('click', () => {
+            const items = document.querySelectorAll('.check-item');
+            const checkedItems = Array.from(items).filter(item => item.checked);
+            
+            if (checkedItems.length === items.length) {
+                alert('Parabéns! Você seguiu todos os passos corretamente, siga para o próximo MID.');
+            } else {
+                alert(`Você ainda não completou a checklist. Faltam ${items.length - checkedItems.length} itens.`);
+            }
+        });
+
+        // Lógica para abrir e fechar a checklist flutuante
+        document.getElementById('openChecklist').addEventListener('click', () => {
+            const checklist = document.getElementById('floatingChecklist');
+            checklist.style.display = checklist.style.display === 'none' || checklist.style.display === '' ? 'block' : 'none';
+        });
+    </script>
+
+</body>
+</html>
